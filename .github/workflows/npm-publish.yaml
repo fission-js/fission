@@ -1,0 +1,26 @@
+name: Test and publish
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+      - name: Build
+        run: yarn build
+      - name: Publish package to npm
+        uses: JS-DevTools/npm-publish@v1
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
