@@ -1,5 +1,5 @@
 {
-    "name": "@fission/core",
+    "name": "@fission-js/core",
     "version": "0.0.1",
     "repository": "git@github.com:lybrus/fission.git",
     "author": "Damir Rashidov <damir@rashidov.eu>",
