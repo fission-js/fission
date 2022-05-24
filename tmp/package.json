@@ -1,6 +1,6 @@
 {
     "name": "@fission-js/core",
-    "version": "0.0.3",
+    "version": "0.0.2",
     "repository": "git@github.com:lybrus/fission.git",
     "author": "Damir Rashidov <damir@rashidov.eu>",
     "license": "MIT",

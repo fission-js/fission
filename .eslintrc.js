@@ -28,5 +28,20 @@ module.exports = {
         'semi': [2, 'never'],
         'quotes': [2, 'single'],
         'comma-dangle': ['error', 'always-multiline'],
+        '@typescript-eslint/ban-types': ['error',
+            {
+                'types': {
+                    'String': false,
+                    'Boolean': false,
+                    'Number': false,
+                    'Symbol': false,
+                    '{}': false,
+                    'Object': false,
+                    'object': false,
+                    'Function': false,
+                },
+                'extendDefaults': true,
+            },
+        ],
     },
 }
