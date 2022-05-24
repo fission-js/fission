@@ -1,11 +1,13 @@
-import { Type, updateEntityMetadata } from '../metadata-store'
+import { updateEntityMetadata } from '../metadata-store'
 
-export type UIEntityOptions = {
+export interface UIEntityOptions {
   title?: string
+  path?: string
 }
 
-export const UIEntity = (options?: UIEntityOptions): ClassDecorator => {
+export const UIEntity = (options: UIEntityOptions = {}): ClassDecorator => {
   return (target: Function) => {
-    updateEntityMetadata(target, options)
+    const { title = target.name, path = target.name } = options
+    updateEntityMetadata(target, { title, path })
   }
 }
