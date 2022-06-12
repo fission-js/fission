@@ -1,12 +1,19 @@
+import React, { ComponentType } from 'react'
 import { Type } from './Type'
 
 export interface FieldMetadata {
   title?: string
+  primary?: boolean
+}
+
+export interface ListView {
+  entityType: Function
 }
 
 export interface EntityMetadata {
   title?: string
   path?: string
+  list?: ComponentType<ListView>
   fields: Map<string, FieldMetadata>
 }
 
@@ -61,4 +68,9 @@ export const updateFieldMetadata = (
     ...metadata,
     ...fieldMetadata,
   })
+}
+
+export const getIdFieldKey = (target: Function) => {
+  const { fields } = getEntityMetadata(target)
+  return Array.from(fields.entries()).find(([key, { primary }]) => primary)[0]
 }

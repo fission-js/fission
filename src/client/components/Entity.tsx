@@ -1,0 +1,81 @@
+import React, { FC } from 'react'
+import { Button, Form, Input, Typography } from 'antd'
+import { getEntityMetadata, getIdFieldKey } from '../metadata-store'
+import { gql, useMutation, useQuery } from '@apollo/client'
+import { mutation, query } from 'gql-query-builder'
+import { ColumnType } from 'antd/es/table'
+import { Link, useParams } from 'react-router-dom'
+
+interface EntityProps {
+  entityType: Function
+}
+
+const { Title } = Typography
+
+export const Entity: FC<EntityProps> = ({ entityType }) => {
+  const { title, fields } = getEntityMetadata(entityType)
+  const queryName = `get${entityType.name}ById`
+  const { id } = useParams()
+  const { query: QUERY } = query({
+    operation: queryName,
+    fields: Array.from(fields.keys()),
+    variables: {
+      id: {
+        type: 'Float',
+        value: parseInt(id),
+        required: true,
+      },
+    },
+  })
+  const { loading, error, data } = useQuery(gql(QUERY), {
+    variables: { id: parseInt(id) },
+  })
+
+  const { query: MUTATION } = mutation({
+    operation: `update${entityType.name}`,
+    fields: Array.from(fields.keys()),
+    variables: {
+      data: {
+        type: `${entityType.name}InputWithoutId`,
+        required: true,
+      },
+      id: {
+        type: 'Float',
+        required: true,
+      },
+    },
+  })
+
+  const [onFinish, { loading: submitLoading }] = useMutation(gql(MUTATION))
+  return (
+    <>
+      <Title level={1}>{title}</Title>
+      {!loading && !error ? (
+        <Form
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 20 }}
+          onFinish={(values) => {
+            const { id, ...data } = values
+            onFinish({
+              variables: {
+                id: parseInt(id),
+                data,
+              },
+            })
+          }}
+          initialValues={data[queryName]}>
+          {Array.from(fields.entries()).map(([key, { title }]) => (
+            <Form.Item key={key} label={title} name={key}>
+              <Input readOnly={key === 'id'} />
+            </Form.Item>
+          ))}
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      ) : null}
+    </>
+  )
+}
