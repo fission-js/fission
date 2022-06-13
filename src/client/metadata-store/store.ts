@@ -1,5 +1,9 @@
 import React, { ComponentType } from 'react'
 import { Type } from './Type'
+import { FieldOptions } from '@nestjs/graphql'
+
+export type ServerFieldOptions = FieldOptions & { primary?: boolean }
+export const fields1: FieldMetadata[] = []
 
 export interface FieldMetadata {
   title?: string
