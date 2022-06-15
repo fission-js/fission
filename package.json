@@ -1,6 +1,6 @@
 {
     "name": "@fission-js/fission",
-    "version": "0.0.21",
+    "version": "0.0.22",
     "repository": "git@github.com:lybrus/fission.git",
     "author": "Damir Rashidov <damir@rashidov.eu>",
     "license": "MIT",
@@ -13,11 +13,11 @@
         "jest": "jest",
         "clean": "rimraf dist",
         "prebuild": "yarn clean",
-        "build": "tsc",
+        "build": "tsc &&  && rsync -a --prune-empty-dirs --include '*/' --include '*.css' --exclude '*' src/ dist/",
         "dev": "ts-node-dev src/index.ts",
         "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
         "install-peers": "install-peers -f",
-        "build:dev": "rimraf tmp/dist && tsc --outDir tmp/dist && cp package.json ./tmp && rsync -a --prune-empty-dirs --include '*/' --include '*.css' --exclude '*' src/ tmp/dist/\n"
+        "build:dev": "rimraf tmp/dist && tsc --outDir tmp/dist && cp package.json ./tmp && rsync -a --prune-empty-dirs --include '*/' --include '*.css' --exclude '*' src/ tmp/dist/"
     },
     "devDependencies": {
         "@types/jest": "^27.5.1",
