@@ -1,24 +1,24 @@
-import React, { FC } from 'react'
+import React from 'react'
 import { Button, Form, Input, Typography } from 'antd'
-import { getEntityMetadata, getIdFieldKey } from '../metadata-store'
+import { EntityBasedComponent, EntityIdType, store } from '../../../common'
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { mutation, query } from 'gql-query-builder'
-import { ColumnType } from 'antd/es/table'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
-interface EntityProps {
-  entityType: Function
-}
+type EntityProps<T extends EntityIdType = number> = EntityBasedComponent<T>
 
 const { Title } = Typography
 
-export const Entity: FC<EntityProps> = ({ entityType }) => {
-  const { title, fields } = getEntityMetadata(entityType)
-  const queryName = `get${entityType.name}ById`
+export const EntityView = <T extends EntityIdType = number>({
+  EntityClass,
+}: EntityProps<T>) => {
+  const { title } = store.getEntityMetadata(EntityClass)
+  const fields = store.getEntityFields(EntityClass)
+  const queryName = `get${EntityClass.name}ById`
   const { id } = useParams()
   const { query: QUERY } = query({
     operation: queryName,
-    fields: Array.from(fields.keys()),
+    fields: fields.map(({ name }) => name),
     variables: {
       id: {
         type: 'Float',
@@ -32,11 +32,11 @@ export const Entity: FC<EntityProps> = ({ entityType }) => {
   })
 
   const { query: MUTATION } = mutation({
-    operation: `update${entityType.name}`,
-    fields: Array.from(fields.keys()),
+    operation: `update${EntityClass.name}`,
+    fields: fields.map(({ name }) => name),
     variables: {
       data: {
-        type: `${entityType.name}InputWithoutId`,
+        type: `${EntityClass.name}InputWithoutId`,
         required: true,
       },
       id: {
@@ -64,9 +64,9 @@ export const Entity: FC<EntityProps> = ({ entityType }) => {
             })
           }}
           initialValues={data[queryName]}>
-          {Array.from(fields.entries()).map(([key, { title }]) => (
-            <Form.Item key={key} label={title} name={key}>
-              <Input readOnly={key === 'id'} />
+          {fields.map(({ title, name }) => (
+            <Form.Item key={name} label={title} name={name}>
+              <Input readOnly={name === 'id'} />
             </Form.Item>
           ))}
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

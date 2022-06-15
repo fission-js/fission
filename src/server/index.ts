@@ -1,3 +1,4 @@
-export * from './MagicModule'
-export * from './magicResolver'
+export * from './dynamic-module'
+export * from './resolver'
 export * from './decorators'
+export * from '../common'

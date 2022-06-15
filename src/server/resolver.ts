@@ -1,23 +1,17 @@
-import {
-  Args,
-  createUnionType,
-  Mutation,
-  Query,
-  Resolver,
-} from '@nestjs/graphql'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { InjectRepository } from '@nestjs/typeorm'
-import { FindOptionsWhereProperty, In, Repository } from 'typeorm'
-import { magicInputTypeWithId, magicInputTypeWithoutId } from './magicInputType'
-import { EntityClass as EntityClassType, EntityIdType } from 'common/EntityType'
+import { In, Repository } from 'typeorm'
+import { inputTypeWithId, inputTypeWithoutId } from './input-type'
+import { EntityClass as EntityClassType, EntityIdType } from '../common'
 import { BadRequestException } from '@nestjs/common'
 
 //TODO получать тип идентификатора, использовать его в декораторе аргумента
 
-export function magicResolver<T extends EntityIdType = number>(
+export function resolver<T extends EntityIdType = number>(
   EntityClass: EntityClassType<T>,
 ): any {
-  const EntityInputTypeWithId = magicInputTypeWithId(EntityClass)
-  const EntityInputTypeWithoutId = magicInputTypeWithoutId(EntityClass)
+  const EntityInputTypeWithId = inputTypeWithId(EntityClass)
+  const EntityInputTypeWithoutId = inputTypeWithoutId(EntityClass)
 
   @Resolver(() => EntityClass)
   class MagicResolver {

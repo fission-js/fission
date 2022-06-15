@@ -1,19 +1,16 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { fields } from './decorators/ServerField'
-import { EntityClass as EntityClassType, EntityIdType } from 'common/EntityType'
-import { FieldMetadata } from 'server/decorators/ServerField'
-
-const getEntityFields = <T extends EntityIdType = number>(
-  EntityClass: EntityClassType<T>,
-): FieldMetadata[] => {
-  return fields.filter(({ target }) => target === EntityClass)
-}
+import {
+  EntityClass as EntityClassType,
+  EntityIdType,
+  FieldMetadata,
+  store,
+} from '../common'
 
 // TODO input тип для создания должен копировать нуллебл, а для обновления все поля возможны нуллебл
 
 const getInputType = <T extends EntityIdType = number>(
   EntityClass: EntityClassType<T>,
-  fields: FieldMetadata[],
+  fields: FieldMetadata<T>[],
   name: string,
 ): any => {
   @InputType(name)
@@ -29,22 +26,22 @@ const getInputType = <T extends EntityIdType = number>(
   return MagicInput
 }
 
-export const magicInputTypeWithoutId = <T extends EntityIdType = number>(
+export const inputTypeWithoutId = <T extends EntityIdType = number>(
   EntityClass: EntityClassType<T>,
 ): any =>
   getInputType(
     EntityClass,
-    getEntityFields(EntityClass).filter(
-      ({ options: { primary = false } }) => !primary,
-    ),
+    store
+      .getEntityFields(EntityClass)
+      .filter(({ primary = false }) => !primary),
     `${EntityClass.name}InputWithoutId`,
   )
 
-export const magicInputTypeWithId = <T extends EntityIdType = number>(
+export const inputTypeWithId = <T extends EntityIdType = number>(
   EntityClass: EntityClassType<T>,
 ): any =>
   getInputType(
     EntityClass,
-    getEntityFields(EntityClass),
+    store.getEntityFields(EntityClass),
     `${EntityClass.name}InputWithId`,
   )

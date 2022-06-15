@@ -1,11 +1,11 @@
 import React, { ComponentType } from 'react'
-import { ListView, updateEntityMetadata } from '../metadata-store'
-import { EntityList } from '../components/EntityList'
+import { store, EntityBasedComponent, EntityClass } from '../../common'
+import { EntityList } from '../ui'
 
 export interface UIEntityOptions {
   title?: string
   path?: string
-  list?: ComponentType<ListView>
+  list?: ComponentType<EntityBasedComponent>
 }
 
 export const UIEntity = (options: UIEntityOptions = {}): ClassDecorator => {
@@ -15,6 +15,6 @@ export const UIEntity = (options: UIEntityOptions = {}): ClassDecorator => {
       path = target.name,
       list = EntityList,
     } = options
-    updateEntityMetadata(target, { title, path, list })
+    store.addEntityMetadata(target as EntityClass, { title, path, list })
   }
 }

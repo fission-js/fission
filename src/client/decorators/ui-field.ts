@@ -1,4 +1,4 @@
-import { Type, updateFieldMetadata } from '../metadata-store'
+import { EntityClass, store } from '../../common'
 
 export type UIFieldOptions = {
   title?: string
@@ -6,8 +6,11 @@ export type UIFieldOptions = {
 }
 
 export const UIField = (options: UIFieldOptions = {}): PropertyDecorator => {
-  return (target: Type<unknown>, propertyKey: string) => {
+  return (target: Function, propertyKey: string) => {
     const { title = propertyKey, primary = false } = options
-    updateFieldMetadata(target, propertyKey, { title, primary })
+    store.addFieldMetadata(target.constructor as EntityClass, propertyKey, {
+      title,
+      primary,
+    })
   }
 }

@@ -1,10 +1,8 @@
 import { FieldOptions, ReturnTypeFunc } from '@nestjs/graphql'
 import { reflectTypeFromMetadata } from '@nestjs/graphql/dist/utils/reflection.utilts'
-import { PropertyMetadata } from '@nestjs/graphql/dist/schema-builder/metadata'
+import { EntityClass, store } from '../../common'
 
 export type ServerFieldOptions = FieldOptions & { primary?: boolean }
-export type FieldMetadata = PropertyMetadata & { options: ServerFieldOptions }
-export const fields: FieldMetadata[] = []
 
 export const ServerField = (
   type: ReturnTypeFunc,
@@ -19,12 +17,10 @@ export const ServerField = (
       typeOptions: options,
     })
 
-    fields.push({
-      name: propertyKey,
+    store.addFieldMetadata(prototype.constructor as EntityClass, propertyKey, {
       schemaName: options.name || propertyKey,
       typeFn: getType,
       options: typeOptions as ServerFieldOptions,
-      target: prototype.constructor,
       description: options.description,
       deprecationReason: options.deprecationReason,
       complexity: options.complexity,

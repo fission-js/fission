@@ -1,3 +1,3 @@
-export * from './MagicEntity'
-export * from './MagicField'
-export * from './UIEntity'
+export * from './entity'
+export * from './field'
+export * from './ui-entity'

@@ -1,4 +1,4 @@
-export * from './MagicModule'
+export * from './dynamic-module'
 export * from './decorators'
-export * from './metadata-store'
-export * from './components'
+export * from './ui'
+export * from '../common'
