@@ -1,4 +1,5 @@
-export * from './dynamic-module'
+export * from './entity-module'
 export * from './resolver'
 export * from './decorators'
 export * from '../common'
+export * from './app-module'

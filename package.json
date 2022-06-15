@@ -1,6 +1,6 @@
 {
     "name": "@fission-js/fission",
-    "version": "0.0.12",
+    "version": "0.0.21",
     "repository": "git@github.com:lybrus/fission.git",
     "author": "Damir Rashidov <damir@rashidov.eu>",
     "license": "MIT",
@@ -17,7 +17,7 @@
         "dev": "ts-node-dev src/index.ts",
         "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
         "install-peers": "install-peers -f",
-        "build:dev": "rimraf tmp/dist && tsc --outDir tmp/dist && cp package.json ./tmp"
+        "build:dev": "rimraf tmp/dist && tsc --outDir tmp/dist && cp package.json ./tmp && rsync -a --prune-empty-dirs --include '*/' --include '*.css' --exclude '*' src/ tmp/dist/\n"
     },
     "devDependencies": {
         "@types/jest": "^27.5.1",
@@ -43,6 +43,7 @@
     },
     "peerDependencies": {
         "@apollo/client": "^3.6.6",
+        "@nestjs/apollo": "^10.0.16",
         "@nestjs/common": "^8.4.5",
         "@nestjs/graphql": "^10.0.12",
         "@nestjs/typeorm": "^8.0.4",
