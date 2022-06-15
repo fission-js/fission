@@ -1,6 +1,6 @@
 {
     "name": "@fission-js/fission",
-    "version": "0.0.22",
+    "version": "0.0.23",
     "repository": "git@github.com:lybrus/fission.git",
     "author": "Damir Rashidov <damir@rashidov.eu>",
     "license": "MIT",
@@ -13,7 +13,7 @@
         "jest": "jest",
         "clean": "rimraf dist",
         "prebuild": "yarn clean",
-        "build": "tsc &&  && rsync -a --prune-empty-dirs --include '*/' --include '*.css' --exclude '*' src/ dist/",
+        "build": "tsc && rsync -a --prune-empty-dirs --include '*/' --include '*.css' --exclude '*' src/ dist/",
         "dev": "ts-node-dev src/index.ts",
         "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
         "install-peers": "install-peers -f",
