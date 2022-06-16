@@ -15,8 +15,9 @@ export const Field = (
   const [type, options = {}]: [ReturnTypeFunc, FieldOptions] = fieldOptions
     ? [typeOrOptions as ReturnTypeFunc, fieldOptions as FieldOptions]
     : [undefined, typeOrOptions as FieldOptions]
+  const graphqlType = options?.primary ? () => ID : type
   return applyDecorators(
-    GraphqlField(options?.primary ? () => ID : type, options),
+    graphqlType ? GraphqlField(graphqlType, options) : GraphqlField(options),
     options?.primary ? PrimaryGeneratedColumn(options) : Column(options),
     ServerField(type, options),
   )
